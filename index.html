@@ -605,27 +605,367 @@
         const INITIAL_MEMBERS = [
             {
                 id: 'mem-1',
-                name: 'Giuse Nguyễn Văn A',
+                name: 'Giuse Maria Trần Văn Hùng',
                 group: 'Ban Trị Sự',
                 title: 'Trưởng Ban',
-                phone: '(619) 555-0101',
-                email: 'nguyena@example.com',
-                address: '1234 Linda Vista Rd, San Diego, CA 92111',
-                dob: '1968-05-15'
+                phone: '(619) 555-1001',
+                email: 'hung.tran@example.com',
+                address: '4521 El Cajon Blvd, San Diego, CA 92115',
+                dob: '1970-03-12'
             },
             {
                 id: 'mem-2',
-                name: 'Gioan Baotixita Trần Văn B',
+                name: 'Maria Phạm Thị Lan',
                 group: 'Ban Trị Sự',
-                title: 'Phó Ban',
-                phone: '(619) 555-0102',
-                email: 'tranb@example.com',
-                address: '5678 El Cajon Blvd, San Diego, CA 92115',
-                dob: '1972-08-20'
+                title: 'Thư Ký',
+                phone: '(858) 555-1002',
+                email: 'lan.pham@example.com',
+                address: '7890 Convoy St, San Diego, CA 92111',
+                dob: '1975-07-22'
             },
             {
                 id: 'mem-3',
-                name: 'Phêrô Lê Văn C',
+                name: 'Phaolô Nguyễn Minh Tâm',
                 group: 'Toán 1',
                 title: 'Toán Trưởng',
-                phone: '(858) 555-0103',
+                phone: '(619) 555-1003',
+                email: 'tam.nguyen@example.com',
+                address: '1234 Clairemont Mesa Blvd, San Diego, CA 92117',
+                dob: '1982-11-05'
+            },
+            {
+                id: 'mem-4',
+                name: 'Têrêsa Hoàng Mai Linh',
+                group: 'Toán 1',
+                title: 'Đoàn Viên',
+                phone: '(858) 555-1004',
+                email: 'linh.hoang@example.com',
+                address: '3210 University Ave, San Diego, CA 92104',
+                dob: '1988-09-14'
+            },
+            {
+                id: 'mem-5',
+                name: 'Dominic Vũ Thành Long',
+                group: 'Toán 2',
+                title: 'Toán Trưởng',
+                phone: '(619) 555-1005',
+                email: 'long.vu@example.com',
+                address: '6543 Mira Mesa Blvd, San Diego, CA 92126',
+                dob: '1980-01-30'
+            },
+            {
+                id: 'mem-6',
+                name: 'Anna Đỗ Thị Ngọc',
+                group: 'Toán 2',
+                title: 'Đoàn Viên',
+                phone: '(858) 555-1006',
+                email: 'ngoc.do@example.com',
+                address: '9876 Balboa Ave, San Diego, CA 92123',
+                dob: '1992-06-18'
+            },
+            {
+                id: 'mem-7',
+                name: 'Gioan Baotixita Ngô Văn Phúc',
+                group: 'Toán 3',
+                title: 'Toán Trưởng',
+                phone: '(619) 555-1007',
+                email: 'phuc.ngo@example.com',
+                address: '1122 Sports Arena Blvd, San Diego, CA 92110',
+                dob: '1978-12-03'
+            },
+            {
+                id: 'mem-8',
+                name: 'Catarina Bùi Diễm Hương',
+                group: 'Toán 3',
+                title: 'Đoàn Viên',
+                phone: '(858) 555-1008',
+                email: 'huong.bui@example.com',
+                address: '4455 Morena Blvd, San Diego, CA 92117',
+                dob: '1990-04-25'
+            }
+        ];
+
+        let members = JSON.parse(localStorage.getItem('lmtt_members')) || INITIAL_MEMBERS;
+        let events = JSON.parse(localStorage.getItem('lmtt_events')) || INITIAL_EVENTS;
+        let isAuthenticated = localStorage.getItem('lmtt_auth') === 'true';
+        let currentFilter = 'ALL';
+
+        function initApp() {
+            updateAuthUI();
+            renderEvents();
+            renderMembers();
+        }
+
+        function updateAuthUI() {
+            const badge = document.getElementById('privacyBadge');
+            const authBtn = document.getElementById('authBtn');
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            const addEventBtn = document.getElementById('addEventBtn');
+
+            if (isAuthenticated) {
+                badge.className = 'status-badge status-unlocked';
+                badge.innerHTML = '🔓 Đã Mở Khóa (Công Khai)';
+                authBtn.innerText = '🔒 Khóa Lại';
+                authBtn.className = 'btn btn-outline';
+                addMemberBtn.style.display = 'inline-flex';
+                addEventBtn.style.display = 'inline-flex';
+            } else {
+                badge.className = 'status-badge status-locked';
+                badge.innerHTML = '🔒 Đã Khóa (Riêng Tư)';
+                authBtn.innerText = '🔓 Nhập PIN Ban Trị Sự';
+                authBtn.className = 'btn btn-gold';
+                addMemberBtn.style.display = 'none';
+                addEventBtn.style.display = 'none';
+            }
+            renderMembers();
+        }
+
+        function toggleAuthModal() {
+            if (isAuthenticated) {
+                isAuthenticated = false;
+                localStorage.setItem('lmtt_auth', 'false');
+                updateAuthUI();
+            } else {
+                document.getElementById('pinInput').value = '';
+                document.getElementById('authModal').classList.add('active');
+                document.getElementById('pinInput').focus();
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function verifyPin() {
+            const pin = document.getElementById('pinInput').value;
+            if (pin === '2026' || pin === 'lmtt') {
+                isAuthenticated = true;
+                localStorage.setItem('lmtt_auth', 'true');
+                closeAuthModal();
+                updateAuthUI();
+            } else {
+                alert('Mã PIN không chính xác!');
+            }
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('eventsList');
+            if (events.length === 0) {
+                container.innerHTML = '<div class="empty-state">Chưa có sự kiện nào.</div>';
+                return;
+            }
+
+            container.innerHTML = events.map(evt => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <span class="event-title">${evt.title}</span>
+                    </div>
+                    <div class="event-details">
+                        <div>📅 <strong>Thời gian:</strong> ${evt.dateStr}</div>
+                        <div>📍 <strong>Địa điểm:</strong> ${evt.location}</div>
+                        ${evt.description ? `<div>📝 <strong>Mô tả:</strong> ${evt.description}</div>` : ''}
+                    </div>
+                    ${isAuthenticated ? `
+                        <div class="card-actions">
+                            <button class="btn btn-outline btn-sm" onclick="editEvent('${evt.id}')">Sửa</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteEvent('${evt.id}')">Xóa</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('membersList');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = members.filter(m => {
+                const matchesGroup = currentFilter === 'ALL' || m.group === currentFilter;
+                const matchesSearch = m.name.toLowerCase().includes(searchQuery) || (m.phone && m.phone.includes(searchQuery));
+                return matchesGroup && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state">Không tìm thấy đoàn viên phù hợp.</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(m => `
+                <div class="member-card">
+                    <div class="member-name">${m.name}</div>
+                    <div class="member-role">${m.group} ${m.title ? '• ' + m.title : ''}</div>
+                    <div class="member-info">
+                        <div class="info-row">📞 <span>SĐT:</span> <span class="${isAuthenticated ? '' : 'blur-text'}">${m.phone || 'Chưa cập nhật'}</span></div>
+                        <div class="info-row">✉️ <span>Email:</span> <span class="${isAuthenticated ? '' : 'blur-text'}">${m.email || 'Chưa cập nhật'}</span></div>
+                        <div class="info-row">🏠 <span>Địa chỉ:</span> <span class="${isAuthenticated ? '' : 'blur-text'}">${m.address || 'Chưa cập nhật'}</span></div>
+                        <div class="info-row">🎂 <span>Ngày sinh:</span> <span class="${isAuthenticated ? '' : 'blur-text'}">${m.dob || 'Chưa cập nhật'}</span></div>
+                    </div>
+                    ${isAuthenticated ? `
+                        <div class="card-actions">
+                            <button class="btn btn-outline btn-sm" onclick="editMember('${m.id}')">Sửa</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMember('${m.id}')">Xóa</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function filterMembers(group, btnElement) {
+            currentFilter = group;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderMembers();
+        }
+
+        function handleSearch() {
+            renderMembers();
+        }
+
+        // Member Modal Actions
+        function openMemberModal(id = null) {
+            document.getElementById('memberModal').classList.add('active');
+            if (id) {
+                document.getElementById('memberModalTitle').innerText = 'Chỉnh Sửa Đoàn Viên';
+                const m = members.find(item => item.id === id);
+                document.getElementById('memberId').value = m.id;
+                document.getElementById('memberName').value = m.name;
+                document.getElementById('memberGroup').value = m.group;
+                document.getElementById('memberTitle').value = m.title || '';
+                document.getElementById('memberPhone').value = m.phone || '';
+                document.getElementById('memberEmail').value = m.email || '';
+                document.getElementById('memberAddress').value = m.address || '';
+                document.getElementById('memberDob').value = m.dob || '';
+            } else {
+                document.getElementById('memberModalTitle').innerText = 'Thêm Đoàn Viên Mới';
+                document.getElementById('memberId').value = '';
+                document.getElementById('memberName').value = '';
+                document.getElementById('memberGroup').value = 'Ban Trị Sự';
+                document.getElementById('memberTitle').value = '';
+                document.getElementById('memberPhone').value = '';
+                document.getElementById('memberEmail').value = '';
+                document.getElementById('memberAddress').value = '';
+                document.getElementById('memberDob').value = '';
+            }
+        }
+
+        function closeMemberModal() {
+            document.getElementById('memberModal').classList.remove('active');
+        }
+
+        function saveMember() {
+            const id = document.getElementById('memberId').value;
+            const name = document.getElementById('memberName').value.trim();
+            if (!name) {
+                alert('Vui lòng nhập tên đoàn viên!');
+                return;
+            }
+
+            const memberData = {
+                id: id ? id : 'mem-' + Date.now(),
+                name: name,
+                group: document.getElementById('memberGroup').value,
+                title: document.getElementById('memberTitle').value.trim(),
+                phone: document.getElementById('memberPhone').value.trim(),
+                email: document.getElementById('memberEmail').value.trim(),
+                address: document.getElementById('memberAddress').value.trim(),
+                dob: document.getElementById('memberDob').value
+            };
+
+            if (id) {
+                const index = members.findIndex(m => m.id === id);
+                members[index] = memberData;
+            } else {
+                members.push(memberData);
+            }
+
+            localStorage.setItem('lmtt_members', JSON.stringify(members));
+            closeMemberModal();
+            renderMembers();
+        }
+
+        function editMember(id) {
+            openMemberModal(id);
+        }
+
+        function deleteMember(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa đoàn viên này không?')) {
+                members = members.filter(m => m.id !== id);
+                localStorage.setItem('lmtt_members', JSON.stringify(members));
+                renderMembers();
+            }
+        }
+
+        // Event Modal Actions
+        function openEventModal(id = null) {
+            document.getElementById('eventModal').classList.add('active');
+            if (id) {
+                document.getElementById('eventModalTitle').innerText = 'Chỉnh Sửa Sự Kiện';
+                const e = events.find(item => item.id === id);
+                document.getElementById('eventId').value = e.id;
+                document.getElementById('eventTitle').value = e.title;
+                document.getElementById('eventDate').value = e.dateStr;
+                document.getElementById('eventLocation').value = e.location;
+                document.getElementById('eventDesc').value = e.description || '';
+            } else {
+                document.getElementById('eventModalTitle').innerText = 'Thêm Sự Kiện Mới';
+                document.getElementById('eventId').value = '';
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('eventDate').value = '';
+                document.getElementById('eventLocation').value = '';
+                document.getElementById('eventDesc').value = '';
+            }
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.remove('active');
+        }
+
+        function saveEvent() {
+            const id = document.getElementById('eventId').value;
+            const title = document.getElementById('eventTitle').value.trim();
+            const dateStr = document.getElementById('eventDate').value.trim();
+            const location = document.getElementById('eventLocation').value.trim();
+
+            if (!title || !dateStr || !location) {
+                alert('Vui lòng điền đầy đủ các thông tin bắt buộc!');
+                return;
+            }
+
+            const eventData = {
+                id: id ? id : 'evt-' + Date.now(),
+                title: title,
+                dateStr: dateStr,
+                location: location,
+                description: document.getElementById('eventDesc').value.trim(),
+                createdAt: new Date().toISOString()
+            };
+
+            if (id) {
+                const index = events.findIndex(e => e.id === id);
+                events[index] = eventData;
+            } else {
+                events.push(eventData);
+            }
+
+            localStorage.setItem('lmtt_events', JSON.stringify(events));
+            closeEventModal();
+            renderEvents();
+        }
+
+        function editEvent(id) {
+            openEventModal(id);
+        }
+
+        function deleteEvent(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa sự kiện này không?')) {
+                events = events.filter(e => e.id !== id);
+                localStorage.setItem('lmtt_events', JSON.stringify(events));
+                renderEvents();
+            }
+        }
+
+        // Initialize on load
+        window.onload = initApp;
+    </script>
+</body>
+</html>
