@@ -3,96 +3,629 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ban LMTT - Cộng Đoàn Chúa Chiên Lành</title>
-    <!-- Tailwind CSS for modern and clean styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+    <title>Ban Liên Minh Thánh Tâm - Cộng Đoàn Chúa Chiên Lành</title>
+    <!-- Pure self-contained CSS - Zero external CDN dependencies -->
+    <style>
+        :root {
+            --primary: #991b1b;
+            --primary-hover: #7f1d1d;
+            --primary-light: #fef2f2;
+            --gold: #d97706;
+            --gold-light: #fef3c7;
+            --bg-gray: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 0.5rem;
+        }
 
-    <!-- Header / Banner -->
-    <header class="bg-blue-900 text-white py-6 shadow-md">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-2xl md:text-3xl font-bold uppercase">Ban Liên Minh Thánh Tâm</h1>
-            <p class="text-blue-200 mt-1">Cộng Đoàn Chúa Chiên Lành — San Diego, CA</p>
-        </div>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Layout Structure */
+        .header {
+            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            color: #fecaca;
+            font-size: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding-bottom: 3rem;
+        }
+
+        /* Nav Controls */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .privacy-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-locked {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-unlocked {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            color: white;
+        }
+
+        .btn-gold:hover {
+            background-color: #b45309;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-gray);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        /* Sections */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .event-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow-sm);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .badge-new {
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.1rem 0.5rem;
+            border-radius: 9999px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .event-details {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        /* Filter & Search Bar */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            min-width: 240px;
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Members Directory Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .member-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .member-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .member-role {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .member-info {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blur-text {
+            filter: blur(4px);
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .card-actions {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 100%;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 640px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <h1>Ban Liên Minh Thánh Tâm</h1>
+        <p>Cộng Đoàn Chúa Chiên Lành • San Diego, CA</p>
     </header>
 
-    <main class="container mx-auto px-4 py-8 max-w-5xl">
-
-        <!-- SECTION: Monthly Events (Sự Kiện Tháng Này) -->
-        <section class="mb-12 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h2 class="text-xl font-bold text-blue-900 mb-4 flex items-center">
-                📅 Sự Kiện & Lịch Phân Công Tháng Này
-            </h2>
-            <div class="space-y-4">
-                <!-- Event Item 1 -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600">
-                    <div>
-                        <span class="text-xs font-semibold text-blue-800 bg-blue-200 px-2 py-1 rounded">Chủ Nhật đầu tháng</span>
-                        <h3 class="font-bold text-lg mt-1">Chầu Thánh Thể & Sinh Hoạt Định Kỳ</h3>
-                        <p class="text-sm text-gray-600">Phân công trực trật tự: Toán 1 phụ trách.</p>
-                    </div>
-                    <div class="mt-2 sm:mt-0 text-sm font-medium text-gray-700">
-                        ⏰ Ngày 01/11/2026
-                    </div>
-                </div>
-
-                <!-- Event Item 2 -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
-                    <div>
-                        <span class="text-xs font-semibold text-gray-700 bg-gray-200 px-2 py-1 rounded">Họp Ban Trị Sự</span>
-                        <h3 class="font-bold text-lg mt-1">Họp định kỳ chuẩn bị tháng mới</h3>
-                        <p class="text-sm text-gray-600">Địa điểm: Phòng sinh hoạt giáo xứ.</p>
-                    </div>
-                    <div class="mt-2 sm:mt-0 text-sm font-medium text-gray-700">
-                        ⏰ Ngày 15/11/2026
-                    </div>
-                </div>
+    <div class="container">
+        <!-- Privacy Control Toolbar -->
+        <div class="toolbar">
+            <div class="privacy-status">
+                <span>Trạng Thái Quyền Riêng Tư:</span>
+                <span id="privacyBadge" class="status-badge status-locked">🔒 Đã Khóa (Riêng Tư)</span>
             </div>
-        </section>
-
-        <!-- SECTION: Member Directory (Danh Sách Thành Viên / Ban Trị Sự) -->
-        <section>
-            <h2 class="text-xl font-bold text-blue-900 mb-6 flex items-center">
-                👥 Ban Trị Sự & Thành Viên Tiêu Biểu
-            </h2>
-
-            <!-- Grid of Members -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-                <!-- Member Card 1 -->
-                <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-100 hover:shadow-md transition">
-                    <img class="w-24 h-24 mx-auto rounded-full object-cover mb-4 border-2 border-blue-600 shadow-inner" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Avatar">
-                    <h3 class="font-bold text-lg">Giuse Nguyễn Viết Hùng</h3>
-                    <p class="text-sm text-blue-600 font-medium">Đoàn Trưởng</p>
-                    <p class="text-xs text-gray-500 mt-2">📞 (858) 610-8857</p>
-                </div>
-
-                <!-- Member Card 2 -->
-                <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-100 hover:shadow-md transition">
-                    <img class="w-24 h-24 mx-auto rounded-full object-cover mb-4 border-2 border-blue-600 shadow-inner" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Avatar">
-                    <h3 class="font-bold text-lg">Giuse Phùng Trần Trọng Vũ</h3>
-                    <p class="text-sm text-blue-600 font-medium">Đoàn Phó Nội Vụ</p>
-                    <p class="text-xs text-gray-500 mt-2">📞 (858) 610-8722</p>
-                </div>
-
-                <!-- Member Card 3 -->
-                <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-100 hover:shadow-md transition">
-                    <img class="w-24 h-24 mx-auto rounded-full object-cover mb-4 border-2 border-blue-600 shadow-inner" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Avatar">
-                    <h3 class="font-bold text-lg">Phanxicô Xaviê Nguyễn Đỗ Tùng</h3>
-                    <p class="text-sm text-blue-600 font-medium">Đoàn Phó Ngoại Vụ</p>
-                    <p class="text-xs text-gray-500 mt-2">📞 (858) 699-5553</p>
-                </div>
-
+            <div>
+                <button id="authBtn" class="btn btn-gold" onclick="toggleAuthModal()">🔓 Nhập PIN Ban Trị Sự</button>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <!-- Event Calendar Section -->
+        <div class="section-title">
+            <span>📅 Lịch Hoạt Động</span>
+            <button id="addEventBtn" class="btn btn-primary btn-sm" onclick="openEventModal()" style="display:none;">+ Thêm Sự Kiện</button>
+        </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-400 text-center py-6 mt-12 text-sm">
-        <p>&copy; 2026 Ban Liên Minh Thánh Tâm - Cộng Đoàn Chúa Chiên Lành. All rights reserved.</p>
-    </footer>
+        <div id="eventsList" class="events-grid"></div>
 
-</body>
-</html>
+        <!-- Member Directory Section -->
+        <div class="section-title">
+            <span>👥 Danh Sách Đoàn Viên</span>
+            <button id="addMemberBtn" class="btn btn-primary btn-sm" onclick="openMemberModal()" style="display:none;">+ Thêm Đoàn Viên</button>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="filter-bar">
+            <div class="filter-tabs">
+                <button class="tab-btn active" onclick="filterMembers('ALL', this)">Tất Cả</button>
+                <button class="tab-btn" onclick="filterMembers('Ban Trị Sự', this)">Ban Trị Sự</button>
+                <button class="tab-btn" onclick="filterMembers('Toán 1', this)">Toán 1</button>
+                <button class="tab-btn" onclick="filterMembers('Toán 2', this)">Toán 2</button>
+                <button class="tab-btn" onclick="filterMembers('Toán 3', this)">Toán 3</button>
+            </div>
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Tìm theo tên hoặc SĐT..." oninput="handleSearch()">
+        </div>
+
+        <!-- Members Grid -->
+        <div id="membersList" class="members-grid"></div>
+    </div>
+
+    <!-- PIN Authentication Modal -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span>Xác Nhận PIN Ban Trị Sự</span>
+                <button class="btn btn-outline btn-sm" onclick="closeAuthModal()">✕</button>
+            </div>
+            <div class="form-group">
+                <label for="pinInput">Mã PIN Quản Trị:</label>
+                <input type="password" id="pinInput" class="form-control" placeholder="Nhập PIN (VD: 2026 hoặc lmtt)">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeAuthModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="verifyPin()">Xác Nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member CRUD Modal -->
+    <div id="memberModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span id="memberModalTitle">Thêm Đoàn Viên Mới</span>
+                <button class="btn btn-outline btn-sm" onclick="closeMemberModal()">✕</button>
+            </div>
+            <input type="hidden" id="memberId">
+            <div class="form-group">
+                <label>Tên Đoàn Viên *</label>
+                <input type="text" id="memberName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Phân Tổ / Chức Vụ *</label>
+                <select id="memberGroup" class="form-control">
+                    <option value="Ban Trị Sự">Ban Trị Sự</option>
+                    <option value="Toán 1">Toán 1</option>
+                    <option value="Toán 2">Toán 2</option>
+                    <option value="Toán 3">Toán 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Chức Danh (Tùy chọn)</label>
+                <input type="text" id="memberTitle" class="form-control" placeholder="VD: Trưởng Ban, Đoàn Viên">
+            </div>
+            <div class="form-group">
+                <label>Số Điện Thoại</label>
+                <input type="text" id="memberPhone" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="memberEmail" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Địa Chỉ</label>
+                <input type="text" id="memberAddress" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Ngày Sinh (YYYY-MM-DD)</label>
+                <input type="date" id="memberDob" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeMemberModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="saveMember()">Lưu Thông Tin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event CRUD Modal -->
+    <div id="eventModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span id="eventModalTitle">Thêm Sự Kiện Mới</span>
+                <button class="btn btn-outline btn-sm" onclick="closeEventModal()">✕</button>
+            </div>
+            <input type="hidden" id="eventId">
+            <div class="form-group">
+                <label>Tên Sự Kiện *</label>
+                <input type="text" id="eventTitle" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Ngày Giờ *</label>
+                <input type="text" id="eventDate" class="form-control" placeholder="VD: Thứ Sáu, 06/11/2026 - 19:00" required>
+            </div>
+            <div class="form-group">
+                <label>Địa Điểm *</label>
+                <input type="text" id="eventLocation" class="form-control" placeholder="VD: Thánh Đường Chúa Chiên Lành" required>
+            </div>
+            <div class="form-group">
+                <label>Mô Tả</label>
+                <textarea id="eventDesc" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeEventModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="saveEvent()">Lưu Sự Kiện</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pure Javascript Engine -->
+    <script>
+        const INITIAL_EVENTS = [
+            {
+                id: 'evt-1',
+                title: 'Họp Định Kỳ Ban Trị Sự',
+                dateStr: 'Thứ Sáu, 06/11/2026 - 19:00',
+                location: 'Phòng Hội Cộng Đoàn',
+                description: 'Họp chuẩn bị cho Lễ Kính Thánh Tâm Chúa Giêsu.',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'evt-2',
+                title: 'Giờ Chầu Thánh Thể Đoàn Liên Minh',
+                dateStr: 'Thứ Bảy, 14/11/2026 - 18:00',
+                location: 'Thánh Đường Chúa Chiên Lành',
+                description: 'Chầu Thánh Thể cầu nguyện cho các gia đình trong ban.',
+                createdAt: new Date(Date.now() - 10 * 86400000).toISOString()
+            }
+        ];
+
+        const INITIAL_MEMBERS = [
+            {
+                id: 'mem-1',
+                name: 'Giuse Nguyễn Văn A',
+                group: 'Ban Trị Sự',
+                title: 'Trưởng Ban',
+                phone: '(619) 555-0101',
+                email: 'nguyena@example.com',
+                address: '1234 Linda Vista Rd, San Diego, CA 92111',
+                dob: '1968-05-15'
+            },
+            {
+                id: 'mem-2',
+                name: 'Gioan Baotixita Trần Văn B',
+                group: 'Ban Trị Sự',
+                title: 'Phó Ban',
+                phone: '(619) 555-0102',
+                email: 'tranb@example.com',
+                address: '5678 El Cajon Blvd, San Diego, CA 92115',
+                dob: '1972-08-20'
+            },
+            {
+                id: 'mem-3',
+                name: 'Phêrô Lê Văn C',
+                group: 'Toán 1',
+                title: 'Toán Trưởng',
+                phone: '(858) 555-0103',
